@@ -1,4 +1,4 @@
-<!DOCTYPE html> .
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="DayMaster ∞">
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="manifest.json" id="manifest-link">
 <title>DayMaster ∞ — by Abhishek</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&family=JetBrains+Mono:wght@400;600&family=Noto+Serif:ital,wght@1,400&display=swap" rel="stylesheet">
@@ -1240,7 +1240,7 @@ select{
         A sacred productivity sanctuary built to help you master your days, honor your duties, and walk the path of disciplined excellence.
       </div>
       <div style="margin-top:14px;">
-        <span class="about-badge">🤖 Claude AI</span>
+        <span class="about-badge">🤖 Open AI</span>
         <span class="about-badge">📱 PWA Ready</span>
         <span class="about-badge">🔒 Encrypted</span>
         <span class="about-badge">🌙 Offline First</span>
@@ -1269,7 +1269,7 @@ select{
         <span style="font-family:var(--font-mono);font-size:0.7rem;color:var(--accent);">v3.0</span>
       </div>
       <div class="setting-row">
-        <div class="setting-left"><div class="setting-icon" style="background:rgba(255,107,181,0.15);">🤖</div><div><div class="setting-label">AI Engine</div><div class="setting-sub">Claude Sonnet — Anthropic</div></div></div>
+        <div class="setting-left"><div class="setting-icon" style="background:rgba(255,107,181,0.15);">🤖</div><div><div class="setting-label">AI Engine</div><div class="setting-sub">Pollinations AI — Free</div></div></div>
         <span style="color:var(--accent3);font-size:11px;">Active ✓</span>
       </div>
       <div class="setting-row">
@@ -1283,6 +1283,20 @@ select{
       <div class="setting-row" onclick="showToast('Built with 🪷 love, fire 🔥 and sacred code ✦')">
         <div class="setting-left"><div class="setting-icon" style="background:rgba(255,77,109,0.15);">❤️</div><div><div class="setting-label">Made with Love</div><div class="setting-sub">Built with fire, faith & code</div></div></div>
         <span class="setting-chevron">›</span>
+      </div>
+    </div>
+
+    <!-- Special Thanks Section -->
+    <div class="settings-section">🙏 Special Thanks</div>
+    <div class="card" style="text-align:center; padding: 22px 16px;">
+      <div style="font-family:var(--font-head); font-size: 1.05rem; color: var(--accent); margin-bottom: 12px; font-weight: 700;">Gratitude to the Gurus</div>
+      <div style="font-size: 0.82rem; color: var(--text); line-height: 1.7; margin-bottom: 18px;">
+        Deepest thanks to the legendary mentors who guide and inspire:<br>
+        <div style="color:var(--gold); font-weight: 600; margin-top: 8px;">RJ Sir, TK Don, Ashish Sir, Mohit Sir, R.A. Baba, Goat Sir, Nikhil Sir, Dudi Sir, Sachin Sir & HC Verma Sir</div>
+      </div>
+      <div style="padding: 14px; background: linear-gradient(135deg, rgba(245,200,66,0.1), rgba(124,111,255,0.1)); border: 1px solid rgba(245,200,66,0.3); border-radius: 14px;">
+        <div style="font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px;">And a very Special Thanks to</div>
+        <div style="font-family:var(--font-head); font-size: 1.3rem; font-weight: 800; color: var(--accent3); letter-spacing: 0.05em;">ALAKH SIR 🪷</div>
       </div>
     </div>
 
@@ -1886,13 +1900,12 @@ Today's data:
 Reply with a short direct insight. No markdown. Keep it warm, sacred, and motivating.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://text.pollinations.ai/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:150, messages:[{role:'user', content:prompt}]})
+      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
     });
-    const data = await res.json();
-    const text = data.content?.[0]?.text || fallbackInsight();
+    const text = await res.text();
     el.className = ''; el.textContent = text;
   } catch(e) {
     el.className = ''; el.textContent = fallbackInsight();
@@ -1914,14 +1927,15 @@ async function generateMarksAI() {
     return `${s.name}: ${Math.round(avg/s.max*100)}%`;
   }).join(', ');
   const prompt = `You are a study advisor for an IIT aspirant. Based on their marks, give 3 specific actionable study tips. Be concise and energetic.\nMarks: ${subjectData}\nFormat: 3 numbered tips, each 1 sentence. No emojis in tips. Plain text only.`;
+  
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://text.pollinations.ai/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:200, messages:[{role:'user', content:prompt}]})
+      body: JSON.stringify({ messages: [{ role: 'user', content: prompt }] })
     });
-    const data = await res.json();
-    el.textContent = data.content?.[0]?.text || 'Focus on your weakest subject for 45 min daily. Review notes before bed. Practice past papers weekly.';
+    const text = await res.text();
+    el.textContent = text || 'Focus on your weakest subject for 45 min daily. Review notes before bed. Practice past papers weekly.';
   } catch(e) {
     el.textContent = 'Focus on weak subjects daily. Review notes before bed. Practice past papers weekly.';
   }
@@ -1972,18 +1986,17 @@ async function sendAIMessage() {
   const systemPrompt = `You are DayMaster AI — a sacred, wise, and powerful productivity companion for Abhishek, an IIT aspirant. You combine ancient Indian wisdom with modern success principles. Be concise (3-5 sentences max), motivating, and practical. Sprinkle in occasional Sanskrit/wisdom references naturally. User's data: streak=${DB.get('streak',0)} days, karma=${computeKarma()} pts, today's tasks=${DB.get('todos_'+todayKey(),[]).filter(t=>t.done).length} done.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('https://text.pollinations.ai/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 300,
-        system: systemPrompt,
-        messages: chatHistory.slice(-10)
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...chatHistory.slice(-10)
+        ]
       })
     });
-    const data = await res.json();
-    const reply = data.content?.[0]?.text || 'The oracle is temporarily unavailable. Meditate and return. 🙏';
+    const reply = await res.text();
     chatHistory.push({role:'assistant', content: reply});
 
     typingDiv.innerHTML = `<div class="msg-label">✦ DAYMASTER AI</div>${escHtml(reply).replace(/\n/g,'<br>')}`;
@@ -2813,4 +2826,4 @@ if (Notification.permission !== "granted") {
 }
 </script>
 </body>
-</html>```
+</html>
